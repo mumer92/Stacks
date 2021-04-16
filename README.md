@@ -24,7 +24,7 @@ let stack: UIView = .hStack(alignment: .center, margins: .all(16), [
 
 <br/>
 
-`UIEdgeInsets` extensions are available separately.
+`UIEdgeInsets` extensions are not included.
 
 ```swift
 extension UIEdgeInsets {

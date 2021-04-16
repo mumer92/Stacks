@@ -1,6 +1,6 @@
 # Stacks
 
-`UIStackView` convenience APIs inspired by SwiftUI.
+A micro `UIStackView` convenience APIs inspired by SwiftUI.
 
 ```swift
 let stack: UIView = .hStack(alignment: .center, margins: .all(16), [

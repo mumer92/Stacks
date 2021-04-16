@@ -12,7 +12,7 @@ public extension UIView {
         margins: UIEdgeInsets? = nil,
         _ views: [UIView]
     ) -> UIStackView {
-        make(axis: .vertical, alignment: alignment, distribution: distribution, spacing: spacing, margins: margins, views)
+        makeStackView(axis: .vertical, alignment: alignment, distribution: distribution, spacing: spacing, margins: margins, views)
     }
 
     static func hStack(
@@ -22,20 +22,7 @@ public extension UIView {
         margins: UIEdgeInsets? = nil,
         _ views: [UIView]
     ) -> UIStackView {
-        make(axis: .horizontal, alignment: alignment, distribution: distribution, spacing: spacing, margins: margins, views)
-    }
-
-    private static func make(axis: NSLayoutConstraint.Axis, alignment: UIStackView.Alignment, distribution: UIStackView.Distribution, spacing: CGFloat, margins: UIEdgeInsets?, _ views: [UIView]) -> UIStackView {
-        let stack = UIStackView(arrangedSubviews: views)
-        stack.axis = axis
-        stack.alignment = alignment
-        stack.distribution = distribution
-        stack.spacing = spacing
-        if let margins = margins {
-            stack.isLayoutMarginsRelativeArrangement = true
-            stack.layoutMargins = margins
-        }
-        return stack
+        makeStackView(axis: .horizontal, alignment: alignment, distribution: distribution, spacing: spacing, margins: margins, views)
     }
 }
 
@@ -48,6 +35,23 @@ public extension UIView {
     /// Makes a flexible space along the axis of the containing stack view.
     static func spacer(minLength: CGFloat = 0) -> UIView {
         Spacer(length: minLength, isFixed: false)
+    }
+}
+
+// MARK: - Private
+
+private extension UIView {
+    static func makeStackView(axis: NSLayoutConstraint.Axis, alignment: UIStackView.Alignment, distribution: UIStackView.Distribution, spacing: CGFloat, margins: UIEdgeInsets?, _ views: [UIView]) -> UIStackView {
+        let stack = UIStackView(arrangedSubviews: views)
+        stack.axis = axis
+        stack.alignment = alignment
+        stack.distribution = distribution
+        stack.spacing = spacing
+        if let margins = margins {
+            stack.isLayoutMarginsRelativeArrangement = true
+            stack.layoutMargins = margins
+        }
+        return stack
     }
 }
 
@@ -103,6 +107,8 @@ private final class Spacer: UIView {
         NSLayoutConstraint.activate(_constraints)
     }
 }
+
+// MARK: - Preview
 
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI

@@ -106,6 +106,8 @@ private final class Spacer: UIView {
 
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
+
+@available(iOS 13.0, *)
 struct ExampleView: UIViewControllerRepresentable {
     let closure: (UIView) -> Void
 
@@ -124,6 +126,12 @@ struct ExampleView: UIViewControllerRepresentable {
 struct ExampleView_Preview: PreviewProvider {
     static var previews: some View {
         Group {
+
+            // WARNING
+            // !!!!!!!
+            //
+            // This won't work unless you go to Package.swift and change required version to iOS 13
+
             ExampleView { container in
                 let titleLabel = UILabel()
                 titleLabel.font = .preferredFont(forTextStyle: .headline)

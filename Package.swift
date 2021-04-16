@@ -5,8 +5,8 @@ import PackageDescription
 let package = Package(
     name: "Stacks",
     platforms: [
-        .iOS(.v13),
-        .tvOS(.v13)
+        .iOS(.v11),
+        .tvOS(.v11)
     ],
     products: [
         .library(name: "Stacks", targets: ["Stacks"])

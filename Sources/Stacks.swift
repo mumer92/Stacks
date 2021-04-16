@@ -130,7 +130,8 @@ struct ExampleView_Preview: PreviewProvider {
             // WARNING
             // !!!!!!!
             //
-            // This won't work unless you go to Package.swift and change required version to iOS 13
+            // - This won't work unless you go to Package.swift and change required version to iOS 13
+            // - To show borders, uncomment the code in func border(_ color: UIColor, width: CGFloat)
 
             ExampleView { container in
                 let titleLabel = UILabel()
@@ -173,7 +174,7 @@ struct ExampleView_Preview: PreviewProvider {
     }
 }
 
-extension UIEdgeInsets {
+private extension UIEdgeInsets {
     static func all(_ value: CGFloat) -> UIEdgeInsets {
         UIEdgeInsets(top: value, left: value, bottom: value, right: value)
     }

@@ -91,7 +91,7 @@ private final class Spacer: UIView {
     fileprivate override func updateConstraints() {
         super.updateConstraints()
 
-        _constraints.removeAll()
+        NSLayoutConstraint.deactivate(_constraints)
 
         let attributes: [NSLayoutConstraint.Attribute]
         switch axis {
@@ -104,6 +104,7 @@ private final class Spacer: UIView {
             constraint.priority = UILayoutPriority(999)
             return constraint
         }
+
         NSLayoutConstraint.activate(_constraints)
     }
 }

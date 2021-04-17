@@ -141,33 +141,31 @@ struct ExampleView_Preview: PreviewProvider {
             // - To show borders, uncomment the code in func border(_ color: UIColor, width: CGFloat)
 
             ExampleView { container in
-                let titleLabel = UILabel()
-                titleLabel.font = .preferredFont(forTextStyle: .headline)
-                titleLabel.text = "Explore the render loop"
-                titleLabel.numberOfLines = 0
-                titleLabel.border(.blue, width: 1)
+                let titleLabel = UILabel().then {
+                    $0.font = .preferredFont(forTextStyle: .headline)
+                    $0.text = "Explore the render loop"
+                    $0.numberOfLines = 0
+                    $0.border(.blue, width: 1)
+                }
 
-                let subtitleLabel = UILabel()
-                subtitleLabel.text = "Explore how you can improve the performance of your app's user interface by identifying scrolling and animation hitches in your app."
-                subtitleLabel.numberOfLines = 0
-                subtitleLabel.border(.green, width: 1)
+                let subtitleLabel = UILabel().then {
+                    $0.text = "Explore how you can improve the performance of your app's user interface by identifying scrolling and animation hitches in your app."
+                    $0.numberOfLines = 0
+                    $0.border(.green, width: 1)
+                }
 
-                let star = UIImageView(image: UIImage(systemName: "star.fill"))
-                star.tintColor = .systemYellow
-                star.pinSize(CGSize(width: 24, height: 24))
+                let star = UIImageView(systemName: "star.fill", textStyle: .title1, color: .systemYellow)
+                let clock = UIImageView(systemName: "clock", textStyle: .caption1, color: .label)
 
-
-                let clockIcon = UIImageView(image: UIImage(systemName: "clock", withConfiguration: UIImage.SymbolConfiguration(textStyle: .caption1)))
-                clockIcon.tintColor = .label
-
-                let timeLabel = UILabel()
-                timeLabel.font = .preferredFont(forTextStyle: .caption1)
-                timeLabel.text = "20:21"
+                let timeLabel = UILabel().then {
+                    $0.font = .preferredFont(forTextStyle: .caption1)
+                    $0.text = "20:21"
+                }
 
                 let stack: UIView = .hStack(alignment: .center, margins: .all(16), [
                     .vStack(spacing: 8, [
                         titleLabel,
-                        .hStack(spacing: 4, [clockIcon, timeLabel, .spacer()]),
+                        .hStack(spacing: 4, [clock, timeLabel, .spacer()]),
                         subtitleLabel
                     ]),
                     .spacer(minLength: 16),
@@ -176,10 +174,13 @@ struct ExampleView_Preview: PreviewProvider {
 
                 container.addSubview(stack.border(.red, width: 1))
                 stack.centerInSuperview()
+                stack.pinToHorizontalEdges()
             }
         }
     }
 }
+
+// MARK: - UIEdgeInsets Extensions (Private)
 
 private extension UIEdgeInsets {
     static func all(_ value: CGFloat) -> UIEdgeInsets {
@@ -191,20 +192,20 @@ private extension UIEdgeInsets {
     }
 }
 
+// MARK: - Helpers (Private)
+
 private extension UIView {
     @discardableResult func border(_ color: UIColor, width: CGFloat) -> UIView {
-//        layer.borderColor = color.cgColor
-//        layer.borderWidth = width
+        // layer.borderColor = color.cgColor
+        // layer.borderWidth = width
         return self
     }
 
-    func pinToSuperviewEdges() {
+    func pinToHorizontalEdges() {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             leftAnchor.constraint(equalTo: superview!.leftAnchor),
-            topAnchor.constraint(equalTo: superview!.topAnchor),
-            rightAnchor.constraint(equalTo: superview!.rightAnchor),
-            bottomAnchor.constraint(equalTo: superview!.bottomAnchor)
+            rightAnchor.constraint(equalTo: superview!.rightAnchor)
         ])
     }
 
@@ -217,13 +218,26 @@ private extension UIView {
             rightAnchor.constraint(lessThanOrEqualTo: superview!.rightAnchor)
         ])
     }
+}
 
-    func pinSize(_ size: CGSize) {
-        translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalToConstant: size.width),
-            heightAnchor.constraint(equalToConstant: size.height)
-        ])
+@available(iOS 13.0, *)
+private extension UIImageView {
+    convenience init(systemName: String, textStyle: UIFont.TextStyle, color: UIColor?) {
+        let image = UIImage(systemName: systemName, withConfiguration: UIImage.SymbolConfiguration(textStyle: textStyle))
+        self.init(image: image)
+        self.tintColor = color
     }
 }
+
+private protocol Then {}
+
+extension Then where Self: AnyObject {
+    func then(_ closure: (Self) throws -> Void) rethrows -> Self {
+        try closure(self)
+        return self
+    }
+}
+
+extension NSObject: Then {}
+
 #endif

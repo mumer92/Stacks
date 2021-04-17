@@ -37,3 +37,5 @@ extension UIEdgeInsets {
     }
 }
 ```
+
+For more layout goodness check out [Align](https://github.com/kean/).

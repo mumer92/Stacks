@@ -138,20 +138,17 @@ struct ExampleView_Preview: PreviewProvider {
             // !!!!!!!
             //
             // - This won't work unless you go to Package.swift and change required version to iOS 13
-            // - To show borders, uncomment the code in func border(_ color: UIColor, width: CGFloat)
 
             ExampleView { container in
                 let titleLabel = UILabel().then {
                     $0.font = .preferredFont(forTextStyle: .headline)
                     $0.text = "Explore the render loop"
                     $0.numberOfLines = 0
-                    $0.border(.blue, width: 1)
                 }
 
                 let subtitleLabel = UILabel().then {
                     $0.text = "Explore how you can improve the performance of your app's user interface by identifying scrolling and animation hitches in your app."
                     $0.numberOfLines = 0
-                    $0.border(.green, width: 1)
                 }
 
                 let star = UIImageView(systemName: "star.fill", textStyle: .title1, color: .systemYellow)
@@ -172,9 +169,11 @@ struct ExampleView_Preview: PreviewProvider {
                     star
                 ])
 
-                container.addSubview(stack.border(.red, width: 1))
+                container.addSubview(stack)
                 stack.centerInSuperview()
                 stack.pinToHorizontalEdges()
+
+                // stack.addBorderRecursively()
             }
         }
     }
@@ -195,9 +194,27 @@ private extension UIEdgeInsets {
 // MARK: - Helpers (Private)
 
 private extension UIView {
+    @available(iOS 13.0, *)
+    func addBorderRecursively() {
+        var colors: [UIColor] = []
+        func resetColors() {
+            colors = [.systemRed, .systemBlue, .systemGreen, .systemOrange, .systemTeal, .systemPink, .systemPurple, .systemIndigo].reversed()
+        }
+        func addBorder(view: UIView) {
+            if colors.isEmpty {
+                resetColors()
+            }
+            view.border(colors.removeFirst(), width: 1)
+            for subview in view.subviews {
+                addBorder(view: subview)
+            }
+        }
+        addBorder(view: self)
+    }
+
     @discardableResult func border(_ color: UIColor, width: CGFloat) -> UIView {
-        // layer.borderColor = color.cgColor
-        // layer.borderWidth = width
+        layer.borderColor = color.cgColor
+        layer.borderWidth = width
         return self
     }
 
